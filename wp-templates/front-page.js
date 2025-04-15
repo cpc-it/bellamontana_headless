@@ -47,6 +47,7 @@ export default function Component() {
         title={siteTitle}
         description={siteDescription}
         menuItems={primaryMenu}
+        isTransparent={true}
       />
 
       <Main className={styles.home}>

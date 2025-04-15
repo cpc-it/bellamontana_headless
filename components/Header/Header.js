@@ -1,26 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FaBars, FaSearch } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { NavigationMenu, SkipNavigationLink } from '../';
-
 import styles from './Header.module.scss';
-
 
 const cx = classNames.bind(styles);
 
-/**
- * A Header component
- * @param {Props} props The props object.
- * @param {string} props.className An optional className to be added to the container.
- * @return {React.ReactElement} The Header component.
- */
-export default function Header({ className, menuItems }) {
+export default function Header({ className, menuItems, isTransparent = false }) {
   const [isNavShown, setIsNavShown] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const headerClasses = cx('header', className);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const headerClasses = cx('header', className, {
+    transparent: isTransparent && !isScrolled,
+    scrolled: isScrolled || !isTransparent,
+    'over-hero': isTransparent, // used for absolute positioning
+  });
+
   const navClasses = cx(
     'primary-navigation',
     isNavShown ? cx('show') : undefined
@@ -40,6 +47,7 @@ export default function Header({ className, menuItems }) {
                   height={80}
                   alt="Bella Montana logo"
                   layout="responsive"
+                  priority
                 />
               </a>
             </Link>

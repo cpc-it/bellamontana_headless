@@ -1,8 +1,65 @@
 @import 'styles/Variables';
 
 .header {
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+
+  &.over-hero {
+    position: absolute; // ✅ sits on top of hero
+  }
+
+  &.scrolled {
+    position: sticky; // ✅ becomes sticky after scroll
+    background-color: var(--color-white);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: var(--color-black);
+
+    .nav-toggle {
+      border-color: var(--color-black);
+      color: var(--color-black);
+    }
+
+    :global(.menu) {
+      a {
+        color: var(--color-black);
+
+        &:hover,
+        &:focus {
+          color: rgb(66, 130, 105);
+        }
+      }
+    }
+  }
+
+  &.transparent {
+    background-color: transparent;
+    // backdrop-filter: blur(6px);
+    // color: var(--color-white);
+
+    .nav-toggle {
+      border-color: var(--color-white);
+      color: var(--color-white);
+    }
+
+    :global(.menu) {
+      a {
+        color: var(--color-white);
+
+        &:hover,
+        &:focus {
+          color: rgb(66, 130, 105);
+        }
+      }
+    }
+  }
+}
+
+
+.header {
   color: var(--color-white);
-  background-color: var(--color-white);
+  // background-color: var(--color-white);
 }
 
 .bar {

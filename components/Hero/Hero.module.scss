@@ -1,30 +1,42 @@
 .hero-wrap {
+    position: relative;
     background-image: url('/static/hero.jpg');
     width: 100vw;
     height: 100vh;
-
-    .hero-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-top: 10rem;
-
-        p {
-            text-align: center;
-            color: white;
-            font-size: 2.1rem;
-            font-weight: 700;
-
-            margin-top: 1rme;
-
-            span {
-               color: rgb(189, 139, 19);
-            }
-
-
-
-        }
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: 1;
+      pointer-events: none;
     }
-
-}
+  
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding-top: 0;
+  
+      p {
+        text-align: center;
+        color: white;
+        font-size: 2.1rem;
+        font-weight: 700;
+        margin-top: 2rem;
+  
+        span {
+          color: rgb(189, 139, 19);
+        }
+      }
+    }
+  }
+  
