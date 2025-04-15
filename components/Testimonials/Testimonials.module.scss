@@ -86,6 +86,9 @@
           // flex-wrap: wrap;
           display: grid;
           grid-template-columns: 1fr 1fr 1fr;
+          @media screen and (max-width: 685px) {
+            display: none;
+          }
           .single-icon {
             margin: .5rem .75rem 0;
             display: flex;
