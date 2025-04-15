@@ -91,4 +91,7 @@ hr {
   background-size: cover;
   background-position: center;
   padding: 6rem 0;
+  @media screen and (max-width: 685px) {
+    padding: 0
+  }
 }

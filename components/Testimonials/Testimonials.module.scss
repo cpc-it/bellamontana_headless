@@ -41,8 +41,21 @@
 
       .slide {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 40% 60%;
         text-align: left;
+
+        @media screen and (max-width: 1100px) {
+          grid-template-columns: 50% 50%;
+        }
+
+        @media screen and (max-width: 865px) {
+          grid-template-columns: 65% 35%;
+        }
+
+        @media screen and (max-width: 685px) {
+          display: flex;
+          flex-direction: column-reverse !important;
+        }
 
         h2 {
           font-weight: 700;
@@ -60,10 +73,35 @@
       }
 
       .slideContent {
-        padding: 7.5rem 5rem;
+        padding: 5rem;
         // .button {
         //   width: 100%;
         // }
+        @media screen and (max-width: 685px) {
+          padding: 3rem;
+        }
+        .icons-wrapper {
+          // display: flex;
+          // justify-content: space-between;
+          // flex-wrap: wrap;
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          .single-icon {
+            margin: .5rem .75rem 0;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            max-width: 100px;
+            p {
+              text-align: center;
+              line-height: 1.5;
+            }
+            img {
+              width: 75px !important;
+            }
+          }
+        }
         p {
           line-height: 1.7;
         }
@@ -71,10 +109,14 @@
 
       .slideImg {
         background-color: pink;
-        min-height: 750px;
+        min-height: 500px;
         background-size: cover;
         background-position: center;
-        padding: 3.6rem 0;
+        padding: 3.5rem 0;
+
+        @media screen and (max-width: 685px) {
+          min-height: 250px;
+        }
 
         &.slide1Img {
           background-image: url('/static/slider/slider-bm-sign.jpg');
