@@ -17,7 +17,7 @@ const cx = className.bind(styles);
  * @param {string} props.emptyText Message to show when there are no items.
  * @returns {React.ReactElement} The Homes component
  */
-function Homes({ homes, id, emptyText = 'No homes found.' }) {
+function Homes({ homes, id }) {
   
   const filteredHomes = homes.filter((home) => {
     const status = home.bellaMontanaFields?.status ?? [];
