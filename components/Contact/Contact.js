@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
  */
 export default function Contact() {
   return (
-    <div className={cx('footer-contact')}>
+    <div id="footer-contact" className={cx('footer-contact')}>
       <div className="container">
         <div className={cx('contact-wrap')}>
         <iframe

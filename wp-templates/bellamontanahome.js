@@ -22,38 +22,48 @@ export default function Component(props) {
   const primaryMenu = props?.data?.headerMenuItems?.nodes ?? [];
   const footerMenu = props?.data?.footerMenuItems?.nodes ?? [];
   
-  const { featuredImage, bellaMontanaFields } = props.data.bellamontanahome;
-  const { projectTitle, summary, contentArea, status } = bellaMontanaFields;
-  
+  const { title, content, featuredImage, bellaMontanaFields } = props.data.bellamontanahome;
+  const { status, price, rentalDeposit, dateAvailable, realtorName, realtorEmail, realtorPhone } = bellaMontanaFields;
+
   const isAvailable = status === 'forRent' || status === 'forSale';
 
   return (
     <>
       <SEO
-        title={`${projectTitle} - ${siteTitle}`}
+        title={`${title} - ${siteTitle}`}
         imageUrl={featuredImage?.node?.sourceUrl}
       />
 
       <Header menuItems={primaryMenu} />
 
       <Main>
-        <EntryHeader title={projectTitle} />
-        
-        {bellaMontanaFields?.status && (
-          <p className="text-center text-sm text-gray-600 uppercase tracking-wide mt-2 mb-4">
-            Status: {bellaMontanaFields.status}
-          </p>
-        )}
+        <EntryHeader title={title} />
 
-        <ProjectHeader
-          image={featuredImage?.node}
-          summary={summary}
-          title={projectTitle}
-        />
-        
-        <div className="container">
-          <ContentWrapper content={contentArea} />
+        <div className="container content">
+          <h1>{title}</h1>
         </div>
+
+        <ContentWrapper>        
+          {bellaMontanaFields?.status && (
+            <>
+              <ProjectHeader
+                image={featuredImage?.node}
+                title={title}
+              />
+              <div
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+              <h3>Status: {bellaMontanaFields.status}</h3>
+              <h3>price: {bellaMontanaFields.price}</h3>
+              <h3>rentalDeposit: {bellaMontanaFields.rentalDeposit}</h3>
+              <h3>dateAvailable: {bellaMontanaFields.dateAvailable}</h3>
+              <h3>realtorName: {bellaMontanaFields.realtorName}</h3>
+              <h3>realtorEmail: {bellaMontanaFields.realtorEmail}</h3>
+              <h3>realtorPhone: {bellaMontanaFields.realtorPhone}</h3>
+            </>
+          )}
+        </ContentWrapper>
+
       </Main>
 
 
@@ -73,11 +83,16 @@ Component.query = gql`
     $asPreview: Boolean = false
   ) {
     bellamontanahome(id: $databaseId, idType: DATABASE_ID, asPreview: $asPreview) {
+      title
+      content
       bellaMontanaFields {
-        projectTitle
-        summary
-        contentArea
         status
+        price
+        rentalDeposit
+        dateAvailable
+        realtorName
+        realtorEmail
+        realtorPhone
       }
       ...FeaturedImageFragment
     }

@@ -6,7 +6,9 @@ import {
   FeaturedImage,
   Footer,
   Header,
+  Contact,
   EntryHeader,
+  ContentWrapper,
   LoadMore,
   Main,
   Homes,
@@ -40,18 +42,22 @@ export default function Page() {
 
       <Main>
         <EntryHeader title="Bella Montaña Homes" />
-        <div className="container">
+        <div className="container content">
+         <h1>Available Homes</h1>
+          <ContentWrapper>
+          <p>Just across from the Highland Drive entrance to Cal Poly, Bella Montaña offers convenience, contemporary living, and style. With ten graceful floor plans, each with their own distinctive features, Bella Montaña accommodates a wide variety of activities and lifestyles.</p>
           <Homes homes={homeList} id="homes-list" />
-          <LoadMore
-            className="text-center"
-            hasNextPage={data.bellamontanahomes.pageInfo.hasNextPage}
-            endCursor={data.bellamontanahomes.pageInfo.endCursor}
-            isLoading={loading}
-            fetchMore={fetchMore}
-          />
+            <LoadMore
+              className="text-center"
+              hasNextPage={data.bellamontanahomes.pageInfo.hasNextPage}
+              endCursor={data.bellamontanahomes.pageInfo.endCursor}
+              isLoading={loading}
+              fetchMore={fetchMore}
+            />
+          </ContentWrapper>
         </div>
       </Main>
-
+      <Contact />
       <Footer title={siteTitle} menuItems={footerMenu} />
     </>
   );

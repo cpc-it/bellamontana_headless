@@ -60,7 +60,10 @@ function Homes({ homes, id, emptyText = 'No homes found.' }) {
           </div>
         );
       })}
-      {filteredHomes.length < 1 && <p>{emptyText}</p>}
+      {filteredHomes.length < 1 && 
+        <div><h2><span>No Homes</span> Currently Available</h2><p>There are currently no homes available at this time. Please see our <a href="#footer-contact">Interested Buyers</a> section for more information.</p></div>
+        
+      }
     </section>
   );
 }
@@ -73,7 +76,6 @@ Homes.fragments = {
       uri
       title
       bellaMontanaFields {
-        projectTitle
         status
       }
       ...FeaturedImageFragment

@@ -77,3 +77,29 @@ a {
   text-decoration: none;
   transition: all .3s;
 }
+
+#main-content {
+  padding-bottom: 50px;
+}
+
+#main-content a {
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+  border-bottom: 2px solid #f8e08e;
+  padding: 1px 2px 0;
+  transition: background-color .2s linear, color .2s linear;
+  color: inherit;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    color: #000;
+    background-color: #f8e08e;
+  }
+}
+
+h2 span {
+  font-weight: 400;
+  text-transform: uppercase;
+  color: rgb(66, 130, 105);
+}
