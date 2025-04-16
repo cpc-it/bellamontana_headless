@@ -36,7 +36,7 @@ export default function Page() {
 
   return (
     <>
-      <SEO title={pageTitle(data?.generalSettings, 'Bella Montaña Homes')} />
+      <SEO title={pageTitle(data?.generalSettings, 'Available Homes')} />
 
       <Header menuItems={primaryMenu} />
 

@@ -1,3 +1,4 @@
+import classNames from 'classnames/bind';
 import * as MENUS from 'constants/menus';
 import { gql } from '@apollo/client';
 import {
@@ -13,6 +14,45 @@ import {
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
 
+import styles from 'styles/pages/_Homes.module.scss';
+
+const cx = classNames.bind(styles);
+
+const formatCurrency = (value) => {
+  if (!value) return '';
+  const number = parseFloat(value);
+  if (isNaN(number)) return value;
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(number);
+};
+
+const formatDate = (value) => {
+  if (!value) return '';
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return value;
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
+const formatPhoneNumber = (value) => {
+  if (!value) return '';
+  const digits = String(value).replace(/\D/g, '');
+  if (digits.length !== 10 && digits.length !== 11) return value;
+
+  const offset = digits.length === 11 ? 1 : 0;
+  const areaCode = digits.substring(0 + offset, 3 + offset);
+  const firstPart = digits.substring(3 + offset, 6 + offset);
+  const secondPart = digits.substring(6 + offset, 10 + offset);
+
+  return `(${areaCode}) ${firstPart}-${secondPart}`;
+};
+
 export default function Component(props) {
   if (props.loading) {
     return <>Loading...</>;
@@ -21,11 +61,22 @@ export default function Component(props) {
   const { title: siteTitle } = props?.data?.generalSettings;
   const primaryMenu = props?.data?.headerMenuItems?.nodes ?? [];
   const footerMenu = props?.data?.footerMenuItems?.nodes ?? [];
-  
-  const { title, content, featuredImage, bellaMontanaFields } = props.data.bellamontanahome;
-  const { status, price, rentalDeposit, dateAvailable, realtorName, realtorEmail, realtorPhone } = bellaMontanaFields;
 
-  const isAvailable = status === 'forRent' || status === 'forSale';
+  const { title, content, featuredImage, bellaMontanaFields } = props.data.bellamontanahome;
+
+  let {
+    status,
+    price,
+    rentalDeposit,
+    dateAvailable,
+    realtorName,
+    realtorEmail,
+    realtorPhone
+  } = bellaMontanaFields;
+
+  // Normalize status: handles string or array (first value), trims whitespace
+  status = Array.isArray(status) ? status[0] : status;
+  status = typeof status === 'string' ? status.trim() : '';
 
   return (
     <>
@@ -40,32 +91,77 @@ export default function Component(props) {
         <EntryHeader title={title} />
 
         <div className="container content">
-          <h1>{title}</h1>
+
+          <ContentWrapper>
+
+          <div className={cx('contactWrap')}>
+            <div className={cx('contactInfo')}>
+                  <h1>{title}</h1>
+
+                  {bellaMontanaFields?.status && (
+                  <>
+
+                    {status === 'forRent' && price && (
+                      <p><strong>For Rent:</strong> {formatCurrency(price)} / month</p>
+                    )}
+                    {status === 'forSale' && price && (
+                      <p><strong>For Sale:</strong> {formatCurrency(price)}</p>
+                    )}
+
+                    {status === 'forRent' && rentalDeposit && (
+                      <p><strong>Rental Deposit:</strong> {formatCurrency(rentalDeposit)}</p>
+                    )}
+
+                    {dateAvailable && (
+                      <p><strong>Date Available:</strong> {formatDate(dateAvailable)}</p>
+                    )}
+
+                    {(realtorName || realtorEmail || realtorPhone) && <h2>Contact Information</h2>}
+
+                    {realtorName && <p><strong>{realtorName}</strong></p>}
+
+                    {realtorEmail && (
+                      <p>
+                        <a href={`mailto:${realtorEmail}`}>{realtorEmail}</a>
+                      </p>
+                    )}
+
+                    {realtorPhone && (
+                      <p>
+                        <a href={`tel:${String(realtorPhone).replace(/\D/g, '')}`}>
+                          {formatPhoneNumber(realtorPhone)}
+                        </a>
+                      </p>
+                    )}
+
+                  </>
+                )}
+
+            </div>
+
+            <div className={cx('homeImage')}>
+            <a href={featuredImage?.node?.sourceUrl} target="_blank" rel="noopener noreferrer">
+                <FeaturedImage image={featuredImage?.node} />
+              </a>
+            </div>
+
+          </div>
+
+          </ContentWrapper>
         </div>
 
-        <ContentWrapper>        
-          {bellaMontanaFields?.status && (
-            <>
-              <ProjectHeader
-                image={featuredImage?.node}
-                title={title}
-              />
-              <div
-                dangerouslySetInnerHTML={{ __html: content }}
-              />
-              <h3>Status: {bellaMontanaFields.status}</h3>
-              <h3>price: {bellaMontanaFields.price}</h3>
-              <h3>rentalDeposit: {bellaMontanaFields.rentalDeposit}</h3>
-              <h3>dateAvailable: {bellaMontanaFields.dateAvailable}</h3>
-              <h3>realtorName: {bellaMontanaFields.realtorName}</h3>
-              <h3>realtorEmail: {bellaMontanaFields.realtorEmail}</h3>
-              <h3>realtorPhone: {bellaMontanaFields.realtorPhone}</h3>
-            </>
-          )}
+        <ContentWrapper className="container">
+          <hr />
         </ContentWrapper>
 
+        <ContentWrapper>
+          {bellaMontanaFields?.status && (
+            <div className={cx('highlights')}>
+              <div dangerouslySetInnerHTML={{ __html: content }} />
+            </div>
+          )}
+        </ContentWrapper>
       </Main>
-
 
       <Footer title={siteTitle} menuItems={footerMenu} />
     </>

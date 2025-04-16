@@ -51,9 +51,17 @@ ul {
 }
 ol {
   list-style: decimal inside;
+  margin-left: 1rem;
+  li {
+    margin-bottom: .5rem;
+  }
 }
 ul {
   list-style: circle inside;
+  margin-left: 1rem;
+  li {
+    margin-bottom: .5rem;
+  }
 }
 
 dt {
@@ -63,7 +71,7 @@ dt {
 // Dividers
 hr {
   border: 0;
-  border-top: 0.1rem solid var(--color-primary);
+  border-top: 0.1rem solid rgba(0, 0, 0, 0.2);
   margin: 3rem 0;
 }
 

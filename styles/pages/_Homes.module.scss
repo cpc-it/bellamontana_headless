@@ -1,0 +1,40 @@
+@import 'styles/Variables';
+
+.contactWrap {
+    display: grid;
+    // grid-template-columns: 60% 40%;
+    grid-template-columns: 100%;
+    
+
+    @media (min-width: $breakpoint-small) {
+        grid-template-columns: 60% 40%;
+    }
+
+
+    h1 {
+        text-align: left;
+        margin-top: 0;
+    }
+
+    .contactInfo {
+        @media (min-width: $breakpoint-small) {
+            margin-bottom: 0;
+        }
+        margin-bottom: 5rem;
+        p {
+            margin: 0;
+        }
+    }
+
+
+}
+
+.highlights {
+    padding: 0 2rem;
+}
+
+@media (min-width: $breakpoint-small) {
+    .highlights {
+        padding: 0;
+    }
+}

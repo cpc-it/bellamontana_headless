@@ -9,23 +9,44 @@ import appConfig from 'app.config';
 import styles from './Homes.module.scss';
 const cx = className.bind(styles);
 
+// Currency formatter
+const formatCurrency = (value) => {
+  if (!value) return '';
+  const number = parseFloat(value);
+  if (isNaN(number)) return value;
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(number);
+};
+
+const formatDate = (value) => {
+  if (!value) return '';
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return value;
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
 /**
  * Renders a list of Bella Montaña Home items
  * @param {Props} props The props object.
  * @param {Bellamontanahome[]} props.homes The array of home items.
  * @param {string} props.id The unique id for this component.
- * @param {string} props.emptyText Message to show when there are no items.
  * @returns {React.ReactElement} The Homes component
  */
 function Homes({ homes, id }) {
-  
   const filteredHomes = homes.filter((home) => {
     const status = home.bellaMontanaFields?.status ?? [];
     return Array.isArray(status) && (
       status.includes('forSale') || status.includes('forRent')
     );
   });
-  
+
   const { firstNewResultRef, firstNewResultIndex } =
     useFocusFirstNewResult(filteredHomes);
 
@@ -33,6 +54,8 @@ function Homes({ homes, id }) {
     <section {...(id && { id })}>
       {filteredHomes.map((home, i) => {
         const isFirstNewResult = i === firstNewResultIndex;
+        const { status, price, dateAvailable } = home.bellaMontanaFields ?? {};
+        const normalizedStatus = Array.isArray(status) ? status[0]?.trim() : (status ?? '').trim();
 
         return (
           <div className="row" key={home.id ?? ''} id={`home-${home.id}`}>
@@ -44,30 +67,47 @@ function Homes({ homes, id }) {
               />
               <div className={cx('content')}>
                 <Heading level="h3">
-                <Link
+                  <Link
                     legacyBehavior
                     href={`/available-homes${home?.uri?.replace('/bella-montana-home', '') ?? ''}`}
                   >
-
                     <a ref={isFirstNewResult ? firstNewResultRef : null}>
-                      {home.bellaMontanaFields?.projectTitle ?? home.title}
+                      {home.title}
                     </a>
                   </Link>
                 </Heading>
-                <div>Status: {home.bellaMontanaFields?.status?.join(', ')}</div>
+
+                {normalizedStatus === 'forRent' && (
+                  <div><p>For Rent: {formatCurrency(price)} / month</p></div>
+                )}
+                {normalizedStatus === 'forSale' && (
+                  <div><p>For Sale: {formatCurrency(price)}</p></div>
+                )}
+                {!['forRent', 'forSale'].includes(normalizedStatus) && normalizedStatus && (
+                  <div><p>Status: {normalizedStatus}</p></div>
+                )}
+
+              {dateAvailable && (
+                <p>Date Available: {formatDate(dateAvailable)}</p>
+              )}
               </div>
             </div>
           </div>
         );
       })}
-      {filteredHomes.length < 1 && 
-        <div><h2><span>No Homes</span> Currently Available</h2><p>There are currently no homes available at this time. Please see our <a href="#footer-contact">Interested Buyers</a> section for more information.</p></div>
-        
-      }
+
+      {filteredHomes.length < 1 && (
+        <div>
+          <h2><span>No Homes</span> Currently Available</h2>
+          <p>
+            There are currently no homes available at this time. Please see our{' '}
+            <a href="#footer-contact">Interested Buyers</a> section for more information.
+          </p>
+        </div>
+      )}
     </section>
   );
 }
-
 
 Homes.fragments = {
   entry: gql`
@@ -77,6 +117,8 @@ Homes.fragments = {
       title
       bellaMontanaFields {
         status
+        price
+        dateAvailable
       }
       ...FeaturedImageFragment
     }
