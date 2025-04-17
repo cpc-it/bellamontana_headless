@@ -51,7 +51,7 @@ export default function Header({ className, menuItems, isTransparent = false }) 
               </Link>
             </li>
             <li>
-              <Link href="https://calpolypartners.org/" target='_blank'>
+              <Link href="https://calpolypartners.org/" target='_blank' rel="noopener noreferrer">
                 Back to Cal Poly Partners
               </Link>
             </li> 
