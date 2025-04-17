@@ -9,8 +9,11 @@ module.exports = withFaust({
     includePaths: ['node_modules'],
   },
   images: {
-    domains: [getWpHostname()],
-  },
+    domains: [
+      getWpHostname(),
+      'realestate.calpolypartners.org',
+    ],
+  }, 
   i18n: {
     locales: ['en'],
     defaultLocale: 'en',
