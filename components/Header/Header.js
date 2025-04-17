@@ -34,22 +34,34 @@ export default function Header({ className, menuItems, isTransparent = false }) 
     isNavShown ? cx('show') : undefined
   );
 
+  const logoSrc = isTransparent && !isScrolled
+  ? '/logo-white.png'
+  : '/logo-color.png';
+
+
   return (
     <header className={headerClasses}>
       <SkipNavigationLink />
       <div className="container">
+        <div className={cx('menuSecondary')}>
+          <ul>
+            <li><a href="/available-homes#footer-contact">Contact Us</a></li>
+            <li><a href="https://calpolypartners.org/" target='_blank'>Back to Cal Poly Partners</a></li>
+          </ul>
+        </div>
         <div className={cx('bar')}>
           <div className={cx('logo')}>
             <Link legacyBehavior href="/">
               <a title="Home">
-                <Image
-                  src="/logo-color.png"
-                  width={400}
-                  height={80}
-                  alt="Bella Montana logo"
-                  layout="responsive"
-                  priority
-                />
+                  <Image
+                    src={logoSrc}
+                    width={400}
+                    height={80}
+                    alt="Bella Montana logo"
+                    layout="responsive"
+                    priority
+                  />
+
               </a>
             </Link>
           </div>
