@@ -58,6 +58,7 @@ function Homes({ homes, id }) {
         const normalizedStatus = Array.isArray(status) ? status[0]?.trim() : (status ?? '').trim();
 
         return (
+          <>
           <div className="row" key={home.id ?? ''} id={`home-${home.id}`}>
             <div className={cx('list-item')}>
               <FeaturedImage
@@ -93,8 +94,16 @@ function Homes({ homes, id }) {
               </div>
             </div>
           </div>
+
+            {filteredHomes.length >= 1 && (
+                <hr />
+            )}
+            
+          </>
         );
       })}
+
+      
 
       {filteredHomes.length < 1 && (
         <div>
