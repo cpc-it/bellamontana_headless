@@ -73,7 +73,7 @@
     list-style-type: none;
     display: flex;
     margin: 0;
-    padding-top: 3rem;
+    padding-top: 2rem;
     justify-content: flex-end;
     padding-right: 1rem;
     margin-right: 0.5rem;
@@ -99,7 +99,7 @@
   padding: 3rem 0;
   gap: 2rem;
   @media (min-width: $breakpoint-small) {
-    padding: 0 0 3rem 0;
+    padding: 0 0 2rem 0;
   }
 }
 
