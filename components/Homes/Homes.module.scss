@@ -3,12 +3,35 @@
 .list-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   // margin-bottom: 6rem;
 
   @media (min-width: $breakpoint-small) {
     flex-direction: row;
     gap: 4rem;
+  }
+
+  h3 {
+    // margin-top: 0 !important;
+  }
+  p {
+    margin: 0;
+  }
+
+  p:first-of-type {
+    margin-top: 2rem;
+  }
+
+  p:last-of-type {
+    margin-bottom: 2rem;
+  }
+
+  a.learnMore {
+    margin-top: 2rem !important;
+  }
+
+  .imageWrap {
+
   }
 }
 

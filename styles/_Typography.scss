@@ -82,7 +82,7 @@ a {
   padding-bottom: 50px;
 }
 
-#main-content a {
+#main-content a:not(.imageWrap) {
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
   border-bottom: 2px solid #f8e08e;

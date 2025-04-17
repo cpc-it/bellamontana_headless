@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 import React from 'react';
 import Link from 'next/link';
 import { Heading, FeaturedImage } from 'components';
+import Button from 'components/Button';
 import className from 'classnames/bind';
 import useFocusFirstNewResult from 'hooks/useFocusFirstNewResult';
 import appConfig from 'app.config';
@@ -61,11 +62,15 @@ function Homes({ homes, id }) {
           <>
           <div className="row" key={home.id ?? ''} id={`home-${home.id}`}>
             <div className={cx('list-item')}>
-              <FeaturedImage
-                className={cx('image')}
-                image={home?.featuredImage?.node}
-                priority={i < appConfig.projectsAboveTheFold}
-              />
+
+              <a href={`/available-homes${home?.uri?.replace('/bella-montana-home', '') ?? ''}`} className={cx('imageWrap')}>
+                <FeaturedImage
+                  className={cx('image')}
+                  image={home?.featuredImage?.node}
+                  priority={i < appConfig.projectsAboveTheFold}
+                />
+              </a>
+
               <div className={cx('content')}>
                 <Heading level="h3">
                   <Link
@@ -79,18 +84,21 @@ function Homes({ homes, id }) {
                 </Heading>
 
                 {normalizedStatus === 'forRent' && (
-                  <div><p>For Rent: {formatCurrency(price)} / month</p></div>
+                  <p><strong>For Rent:</strong> {formatCurrency(price)} / month</p>
                 )}
                 {normalizedStatus === 'forSale' && (
-                  <div><p>For Sale: {formatCurrency(price)}</p></div>
+                  <p><strong>For Sale:</strong> {formatCurrency(price)}</p>
                 )}
                 {!['forRent', 'forSale'].includes(normalizedStatus) && normalizedStatus && (
-                  <div><p>Status: {normalizedStatus}</p></div>
+                  <p><strong>Status:</strong> {normalizedStatus}</p>
                 )}
 
-              {dateAvailable && (
-                <p>Date Available: {formatDate(dateAvailable)}</p>
-              )}
+                {dateAvailable && (
+                  <p><strong>Date Available:</strong> {formatDate(dateAvailable)}</p>
+                )}
+                
+                <Button href={`/available-homes${home?.uri?.replace('/bella-montana-home', '') ?? ''}`} className={cx('learnMore')}>Learn More</Button>
+                
               </div>
             </div>
           </div>
@@ -98,7 +106,7 @@ function Homes({ homes, id }) {
             {filteredHomes.length >= 1 && (
                 <hr />
             )}
-            
+
           </>
         );
       })}
