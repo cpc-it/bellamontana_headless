@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
+import Link from 'next/link';
 import { FaBars, FaSearch } from 'react-icons/fa';
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { NavigationMenu, SkipNavigationLink } from '../';
 
@@ -45,8 +45,16 @@ export default function Header({ className, menuItems, isTransparent = false }) 
       <div className="container">
         <div className={cx('menuSecondary')}>
           <ul>
-            <li><a href="/available-homes#footer-contact">Contact Us</a></li>
-            <li><a href="https://calpolypartners.org/" target='_blank'>Back to Cal Poly Partners</a></li>
+            <li>
+              <Link href="/available-homes#footer-contact">
+                Contact Us
+              </Link>
+            </li>
+            <li>
+              <Link href="https://calpolypartners.org/" target='_blank'>
+                Back to Cal Poly Partners
+              </Link>
+            </li> 
           </ul>
         </div>
         <div className={cx('bar')}>
