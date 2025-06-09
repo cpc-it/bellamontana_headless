@@ -10,7 +10,7 @@ const appConfig = {
   /**
    * The number of projects to fetch per 'page'.
    */
-  projectsPerPage: 5,
+  projectsPerPage: 100,
 
   /**
    * The number of post featured images that are above the fold for most screen sizes.
