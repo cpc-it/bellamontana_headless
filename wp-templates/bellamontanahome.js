@@ -112,7 +112,11 @@ export default function Component(props) {
                       <p><strong>Rental Deposit:</strong> {formatCurrency(rentalDeposit)}</p>
                     )}
 
-                    {dateAvailable && (
+                    {status === 'salePending' && (
+                      <p><strong>Sale Pending</strong></p>
+                    )}
+
+                    {status !== 'salePending' && dateAvailable && (
                       <p><strong>Date Available:</strong> {formatDate(dateAvailable)}</p>
                     )}
 

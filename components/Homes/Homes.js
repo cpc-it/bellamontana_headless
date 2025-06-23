@@ -44,7 +44,7 @@ function Homes({ homes, id }) {
   const filteredHomes = homes.filter((home) => {
     const status = home.bellaMontanaFields?.status ?? [];
     return Array.isArray(status) && (
-      status.includes('forSale') || status.includes('forRent')
+      status.includes('forSale') || status.includes('forRent') || status.includes('salePending')
     );
   });
 
@@ -89,14 +89,17 @@ function Homes({ homes, id }) {
                 {normalizedStatus === 'forSale' && (
                   <p><strong>For Sale:</strong> {formatCurrency(price)}</p>
                 )}
-                {!['forRent', 'forSale'].includes(normalizedStatus) && normalizedStatus && (
+                {normalizedStatus === 'salePending' && (
+                  <p><strong>Sale Pending</strong></p>
+                )}
+                {!['forRent', 'forSale', 'salePending'].includes(normalizedStatus) && normalizedStatus && (
                   <p><strong>Status:</strong> {normalizedStatus}</p>
                 )}
 
-                {dateAvailable && (
+                {normalizedStatus !== 'salePending' && dateAvailable && (
                   <p><strong>Date Available:</strong> {formatDate(dateAvailable)}</p>
                 )}
-                
+
                 <Button href={`/available-homes${home?.uri?.replace('/bella-montana-home', '') ?? ''}`} className={cx('learnMore')}>Learn More</Button>
                 
               </div>
