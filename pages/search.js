@@ -13,13 +13,22 @@ import {
   Footer,
 } from 'components';
 import { BlogInfoFragment } from 'fragments/GeneralSettings';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GetSearchResults } from 'queries/GetSearchResults';
 import styles from 'styles/pages/_Search.module.scss';
-import appConfig from 'app.config';
+
+const searchResultsPerPage = 10;
+const searchResultsFetchSize = 50;
 
 export default function Page() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [visibleResultsCount, setVisibleResultsCount] = useState(
+    searchResultsPerPage
+  );
+
+  useEffect(() => {
+    setVisibleResultsCount(searchResultsPerPage);
+  }, [searchQuery]);
 
   const { data: pageData } = useQuery(Page.query, {
     variables: Page.variables(),
@@ -36,13 +45,40 @@ export default function Page() {
     fetchMore: fetchMoreSearchResults,
   } = useQuery(GetSearchResults, {
     variables: {
-      first: appConfig.postsPerPage,
+      first: searchResultsFetchSize,
       after: '',
       search: searchQuery,
     },
     skip: searchQuery === '',
     fetchPolicy: 'network-only',
   });
+  const filteredSearchResults =
+    searchResultsData?.contentNodes?.edges
+      ?.map(({ node }) => node)
+      ?.filter((node) => {
+        if (node.__typename !== 'Bellamontanahome') {
+          return true;
+        }
+
+        const rawStatus = node?.bellaMontanaFields?.status;
+        const status = Array.isArray(rawStatus)
+          ? rawStatus[0]?.trim()
+          : (rawStatus ?? '').trim();
+
+        return (
+          status === 'forSale' ||
+          status === 'forRent' ||
+          status === 'salePending'
+        );
+      }) ?? [];
+  const visibleSearchResults = filteredSearchResults.slice(
+    0,
+    visibleResultsCount
+  );
+  const hasMoreVisibleResults =
+    filteredSearchResults.length > visibleResultsCount;
+  const hasMoreRawResults =
+    searchResultsData?.contentNodes?.pageInfo?.hasNextPage ?? false;
 
   return (
     <>
@@ -77,20 +113,52 @@ export default function Page() {
           )}
 
           <SearchResults
-            searchResults={searchResultsData?.contentNodes?.edges?.map(
-              ({ node }) => node
-            )}
+            searchResults={visibleSearchResults}
             isLoading={searchResultsLoading}
+            searchQuery={searchQuery}
           />
 
-          {searchResultsData?.contentNodes?.pageInfo?.hasNextPage && (
+          {(hasMoreVisibleResults || hasMoreRawResults) && (
             <div className={styles['load-more']}>
               <Button
-                onClick={() => {
-                  fetchMoreSearchResults({
+                onClick={async () => {
+                  const nextVisibleCount =
+                    visibleResultsCount + searchResultsPerPage;
+
+                  if (filteredSearchResults.length >= nextVisibleCount) {
+                    setVisibleResultsCount(nextVisibleCount);
+                    return;
+                  }
+
+                  if (!hasMoreRawResults) {
+                    setVisibleResultsCount(nextVisibleCount);
+                    return;
+                  }
+
+                  setVisibleResultsCount(nextVisibleCount);
+
+                  await fetchMoreSearchResults({
                     variables: {
+                      first: searchResultsFetchSize,
                       after:
                         searchResultsData?.contentNodes?.pageInfo?.endCursor,
+                      search: searchQuery,
+                    },
+                    updateQuery: (previousResult, { fetchMoreResult }) => {
+                      if (!fetchMoreResult?.contentNodes) {
+                        return previousResult;
+                      }
+
+                      return {
+                        ...previousResult,
+                        contentNodes: {
+                          ...fetchMoreResult.contentNodes,
+                          edges: [
+                            ...(previousResult?.contentNodes?.edges ?? []),
+                            ...(fetchMoreResult?.contentNodes?.edges ?? []),
+                          ],
+                        },
+                      };
                     },
                   });
                 }}

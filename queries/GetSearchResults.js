@@ -5,15 +5,40 @@ export const GetSearchResults = gql`
     contentNodes(first: $first, after: $after, where: { search: $search }) {
       edges {
         node {
+          __typename
           id
           uri
-          date
           databaseId
           ... on NodeWithTitle {
             title
           }
           ... on NodeWithExcerpt {
             excerpt
+          }
+          ... on Page {
+            content
+          }
+          ... on Post {
+            content
+          }
+          ... on Bellamontanahome {
+            content
+            bellaMontanaFields {
+              status
+            }
+          }
+          ... on Project {
+            projectFields {
+              title: projectTitle
+              summary
+              contentArea
+            }
+          }
+          ... on Testimonial {
+            testimonialFields {
+              testimonialContent
+              testimonialAuthor
+            }
           }
         }
       }

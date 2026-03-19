@@ -2,16 +2,18 @@
   text-align: center;
   color: var(--color-black);
   padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-bottom: 2.4rem;
 }
 
 .search-header-pane {
-  background-color: var(--color-white);
+  background: linear-gradient(180deg, #ffffff 0%, #faf8f2 100%);
   margin-bottom: 4rem;
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
   margin-top: -2px; // Just in case there is any whitespace between elements.
+  border-bottom: 1px solid rgba(21, 71, 52, 0.08);
 }
 
 .load-more {
   text-align: center;
+  margin-top: 1rem;
 }

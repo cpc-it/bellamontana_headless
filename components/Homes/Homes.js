@@ -42,9 +42,13 @@ const formatDate = (value) => {
  */
 function Homes({ homes, id }) {
   const filteredHomes = homes.filter((home) => {
-    const status = home.bellaMontanaFields?.status ?? [];
-    return Array.isArray(status) && (
-      status.includes('forSale') || status.includes('forRent') || status.includes('salePending')
+    const rawStatus = home.bellaMontanaFields?.status;
+    const status = Array.isArray(rawStatus) ? rawStatus[0]?.trim() : (rawStatus ?? '').trim();
+
+    return (
+      status === 'forSale' ||
+      status === 'forRent' ||
+      status === 'salePending'
     );
   });
 
