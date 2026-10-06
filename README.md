@@ -13,14 +13,14 @@ This repository contains the Bella Montana frontend built with Next.js and Faust
 
 ## Requirements
 
-- Node.js 18+ recommended
-- npm
+- Node.js 22.x
+- npm 10.x
 - A WordPress instance with:
   - FaustWP configured
   - WPGraphQL available at `/graphql`
   - Content and templates expected by this frontend
 
-The `package.json` engine field still allows older Node versions, but current Next.js support is better on modern LTS Node. Use Node 18 or 20 unless you have a project-specific reason not to.
+Use Node.js 22 for both local development and WP Engine deployments. WP Engine's builder supports Node.js 22 and 24, but no longer supports Node.js 20. The `package.json` engines field selects Node.js 22 for deployment.
 
 ## Local Development
 
